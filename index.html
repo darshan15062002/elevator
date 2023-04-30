@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Elevator Control System</title>
+	<style>
+        *{
+            background-color: beige;
+        }
+        .container{
+            display: flex;
+            justify-content: center;align-items: center;
+           height: 600px;
+        }
+        .btn{
+           
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn div{
+        display: flex;
+        justify-content: center;align-items: center;
+            
+
+        }
+		.floor{
+			display: inline-block;
+			width: 100px;
+			height: 50px;
+			border: 1px solid black;
+			text-align: center;
+			vertical-align: middle;
+			margin: 10px;
+		}
+		.active{
+			background-color: green;
+			color: white;
+		}
+        .elevator_container{
+            height: 100%;
+            position: relative;
+            transition: 1s all ease;
+        }
+		.elevator{
+			display: inline-block;
+			width: 70px;
+            background-image: url('https://png.pngtree.com/png-clipart/20190705/original/pngtree-elevator-door-png-image_4360205.jpg');
+             
+             background-position: center;
+             background-size: cover;
+            bottom: 0;
+			height: 100px;
+			border: 1px solid black;
+			text-align: center;
+			margin: 10px;
+			position: absolute;
+		}
+		.elevator .indicator{
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			width: 20px;
+			height: 20px;
+            color: white;
+			background-color: red;
+			border-radius: 50%;
+		}
+		.elevator .door{
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 70px;
+			height: 100px;
+            background-image: url('https://thumbnail.imgbin.com/21/15/21/imgbin-elevator-bertikal-user-prosoc-condominium-elevator-love-9GMJ8RyLyjc6kDVv5cdjeH9UM_t.jpg');
+             
+        background-position: center;
+        background-size: cover;
+		}
+	</style>
+</head>
+<body>
+    <div class="container">
+    <div class="btn">
+        <div class="floor" id="floor4" onclick="requestElevator(4)">Floor 4</div>
+        <div class="floor" id="floor3" onclick="requestElevator(3)">Floor 3</div>
+        <div class="floor" id="floor2" onclick="requestElevator(2)">Floor 2</div>
+	<div class="floor active" id="floor1" onclick="requestElevator(1)">Floor 1</div>
+</div>
+<div class="elevator_container">
+	<div class="elevator" id="elevator">
+		<div class="indicator"></div>
+		<div class="door"></div>
+	</div>
+</div>
+</div>
+
+	<script>
+		var elevator = document.getElementById("elevator");
+		var floorButtons = document.getElementsByClassName("floor");
+
+		var currentFloor = 1;
+		var destinationFloor = 1;
+		var doorIsOpen = true;
+
+		function requestElevator(floorNumber){
+            if (currentFloor===floorNumber) {
+                openDoor()
+            };
+            
+			destinationFloor = floorNumber;
+            console.log("cf",currentFloor,"df",destinationFloor);
+			moveElevator();
+		}
+
+		function moveElevator(){
+         while(currentFloor!==destinationFloor ){
+			if(currentFloor < destinationFloor){
+               
+                elevator.style.transition = "bottom 1s ease-in-out";
+				elevator.style.bottom = (100 * (destinationFloor - 1)) + "px";
+				currentFloor=destinationFloor
+			}
+			else if(currentFloor > destinationFloor){
+           
+                elevator.style.transition = "bottom 1s ease-in-out";
+				elevator.style.bottom = (100 * (destinationFloor - 1)) + "px";
+				currentFloor=destinationFloor
+			}
+        }
+
+           
+  
+			updateIndicator();
+            
+		}
+
+		function openDoor(){
+			
+			doorIsOpen=true
+            elevator.querySelector(".door").style.width = "0px";
+            setInterval(closeDoor, 3000);
+
+  
+		}
+       function closeDoor(){
+        doorIsOpen=false
+        elevator.querySelector(".door").style.width = "70px";
+       }
+
+
+        function updateIndicator() {
+  elevator.querySelector(".indicator").innerText = currentFloor;
+  for (var i = 0; i < floorButtons.length; i++) {
+    if (floorButtons[i].classList.contains("active")) {
+      floorButtons[i].classList.remove("active");
+      break;
+    }
+  }
+  document.getElementById(`floor${currentFloor}`).classList.add("active");
+}
+
+		
+	</script>
+</body>
+</html>
